@@ -33,6 +33,14 @@ def classify_safety_tier(question: str) -> dict:
       - "refuse"  : high-risk repairs that require a licensed professional —
                     mistakes can cause fire, flooding, injury, or structural damage
     """
+    
+    
+    # safe: Routine maintenance, completed by homeowners with basic tools/patience with worst case scenario causing cosmetic damage or broken fixture.
+    
+    # caution: Repairs doable for a motivated homeowner, mistakes reveal mild cost/injury, involving systems, water or electricity
+    
+    # refuse: Repairs that require a licensed professional, mistakes can cause fire, flooding, injury, or structural damage.
+    
     return {
         "tier": "unknown",
         "reason": "Classification not yet implemented. Complete Milestone 1.",
