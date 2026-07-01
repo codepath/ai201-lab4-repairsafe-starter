@@ -44,7 +44,8 @@ Record every interaction — question, safety tier, and response preview — to 
 | `"question"` | `str` | The user's question, truncated to 300 characters |
 | `"response_preview"` | `str` | First 200 characters of the generated response |
 | `[your field]` | `[type]` | [description] |
-| `[your field]` | `[type]` | [description] |
+| `"question_length"` | `int` | Original length of the full user question before truncation |
+| `"response_length"` | `int` | Original length of the full generated response before truncation |
 
 ---
 
@@ -53,7 +54,9 @@ Record every interaction — question, safety tier, and response preview — to 
 *The required fields truncate the question to 300 characters and the response to 200. Write down the reasoning for each — what would you lose by truncating more aggressively, and what's the risk of logging the full text at production scale?*
 
 ```
-[your answer here]
+The question is truncated to 300 characters because that usually preserves enough context to understand what the user asked and diagnose classification mistakes, while avoiding storing unnecessarily long or sensitive user input. Truncating more aggressively could remove the key detail that determines the tier, such as whether the user is replacing an existing outlet or adding a new one.
+
+The response preview is truncated to 200 characters because developers mainly need to confirm which responder behavior was used, such as safe instructions, caution warnings, or refusal language. Logging the full response at production scale would create larger files, increase storage costs, and retain more user-related text than necessary.
 ```
 
 ---
@@ -63,7 +66,7 @@ Record every interaction — question, safety tier, and response preview — to 
 *What happens if `logs/` doesn't exist when the function runs for the first time? How will you handle that — and why is this worth thinking about at all?*
 
 ```
-[your answer here]
+Before writing the log entry, the function should create the logs directory if it does not already exist using os.makedirs(..., exist_ok=True). This prevents the first logging attempt from crashing just because the directory is missing. It matters because audit logging should be reliable and should not depend on a manually created local folder.
 ```
 
 ---
@@ -73,7 +76,7 @@ Record every interaction — question, safety tier, and response preview — to 
 *Write an example of what you want the one-line terminal summary to look like after a question is logged. Be specific about format.*
 
 ```
-[your example output here]
+[AUDIT] tier=caution question="Can I replace a bathroom faucet?"
 ```
 
 ---
@@ -85,11 +88,12 @@ Record every interaction — question, safety tier, and response preview — to 
 **The actual log file content after 3 test queries (paste the three JSON lines):**
 
 ```
-[your answer here]
+The actual log file content after 3 test queries:
+[paste your three JSONL lines here after testing]
 ```
 
 **One field you'd add to the log if this were a real production system handling 10,000 questions per day:**
 
 ```
-[your answer here]
+If this system handled 10,000 questions per day, I would add a session_id or request_id field. That would make it easier to trace related interactions, debug repeated attempts to reframe the same risky request, and connect logs across the classifier, responder, and app layers.
 ```
